@@ -15,7 +15,7 @@ export function sendMail(toMail: string, verifyUrl: string) {
   const mailOptions = {
     from: process.env.SMTP_USERNAME, // sender address
     to: toMail, // list of receivers
-    subject: 'Chat GPT Web 账号验证', // Subject line
+    subject: `${process.env.SITE_TITLE} 账号验证`, // Subject line
     html: `
     <div class="page flex-col">
     <div class="box_3 flex-col" style="
@@ -57,7 +57,7 @@ export function sendMail(toMail: string, verifyUrl: string) {
     color: #000000;
     line-height: 37px;
     text-align: center;
-    "><target="_blank" style="text-decoration: none; color: #0088cc;">Chat GPT Web 账号验证</span>
+    "><target="_blank" style="text-decoration: none; color: #0088cc;">${process.env.SITE_TITLE}</a> 账号验证</span>
     
       <div class="box_2 flex-row" style="
     margin: 0 20px;
@@ -82,7 +82,8 @@ export function sendMail(toMail: string, verifyUrl: string) {
   <span class="text_3" style="
   <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333;">
   <h1 style="color: #0088cc;">
-    感谢您使用 Chat GPT Web</a>，
+    感谢您使用 
+    <target="_blank" style="text-decoration: none; color: #0088cc;">${process.env.SITE_TITLE}</a>，
     您的邮箱验证链接为（12小时内有效）：
   </span>
         </div><hr style="
@@ -144,26 +145,6 @@ export function sendMail(toMail: string, verifyUrl: string) {
     color: #00000045;
     line-height: 17px;
   ">此邮件由服务器自动发出，直接回复无效。</span>
-        <a class="text_7" style="
-    height: 17px;
-    font-size: 12px;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #DB214B;
-    line-height: 17px;
-    margin-top: 6px;
-    text-decoration: none;
-  " href="https://github.com/Chanzhaoyu/chatgpt-web">项目作者</a>
-        <a class="text_8" style="
-        height: 17px;
-        font-size: 12px;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #DB214B;
-        line-height: 17px;
-        margin-top: 6px;
-        text-decoration: none;
-      " href="https://github.com/Kerwin1202/chatgpt-web">邮箱注册系统提供者</a>
       </div>
     </div>
   </div>

@@ -23,11 +23,8 @@ services:
       # 超时，单位毫秒，可选
       TIMEOUT_MS: 60000
       # Socks代理，可选，和 SOCKS_PROXY_PORT 一起时生效
-      SOCKS_PROXY_HOST: ${SOCKS_PROXY_HOST}
-      # Socks代理端口，可选，和 SOCKS_PROXY_HOST 一起时生效
-      SOCKS_PROXY_PORT: ${SOCKS_PROXY_PORT}
-      # HTTPS_PROXY 代理，可选
-      HTTPS_PROXY: ${HTTPS_PROXY}
+      # 网站名称
+      SITE_TITLE: ${SITE_TITLE}
       # mongodb 的连接字符串
       MONGODB_URL: ${MONGODB_URL}
       # 网站是否开启注册
