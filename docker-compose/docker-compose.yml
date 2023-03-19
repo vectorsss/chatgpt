@@ -12,6 +12,10 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       # 二选一
       OPENAI_ACCESS_TOKEN: ${OPENAI_ACCESS_TOKEN}
+      # temperature: 默认0.5 值越高，答案的随机性越高
+      OPENAI_API_TEMPERATURE: ${OPENAI_API_TEMPERATURE}
+      # top_p 默认为1, 值越高答案越准确
+      OPENAI_API_TOP_P: ${OPENAI_API_TOP_P}
       # API接口地址，可选，设置 OPENAI_API_KEY 时可用
       OPENAI_API_BASE_URL: ${OPENAI_API_BASE_URL}
       # API模型，可选，设置 OPENAI_API_KEY 时可用

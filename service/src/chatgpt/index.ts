@@ -7,7 +7,7 @@ import { HttpsProxyAgent } from 'https-proxy-agent'
 import fetch from 'node-fetch'
 import axios from 'axios'
 import { sendResponse } from '../utils'
-import { isNotEmptyString } from '../utils/is'
+import { isNotEmptyString, isNumber } from '../utils/is'
 import type { ApiModel, ChatContext, ChatGPTUnofficialProxyAPIOptions, ModelConfig } from '../types'
 
 const ErrorCodeMessage: Record<string, string> = {
@@ -35,12 +35,20 @@ let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
 
   if (process.env.OPENAI_API_KEY) {
     const OPENAI_API_MODEL = process.env.OPENAI_API_MODEL
+    const OPENAI_API_TEMPERATURE = process.env.OPENAI_API_TEMPERATURE
+    const OPENAI_TOP_P = process.env.OPENAI_API_TOP_P
     const model = isNotEmptyString(OPENAI_API_MODEL) ? OPENAI_API_MODEL : 'gpt-3.5-turbo'
+    const temperature = isNumber(OPENAI_API_TEMPERATURE) ? Number(OPENAI_API_TEMPERATURE) : 0.5
+    const top_p = isNumber(OPENAI_TOP_P) ? Number(OPENAI_TOP_P) : 1
 
     const options: ChatGPTAPIOptions = {
       apiKey: process.env.OPENAI_API_KEY,
-      completionParams: { model },
-      debug: true,
+      completionParams: {
+        model,
+        temperature,
+        top_p,
+      },
+      debug: false,
     }
 
     if (isNotEmptyString(process.env.OPENAI_API_BASE_URL))
