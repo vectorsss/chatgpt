@@ -52,7 +52,7 @@ let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
     }
 
     if (isNotEmptyString(process.env.OPENAI_API_BASE_URL))
-      options.apiBaseUrl = process.env.OPENAI_API_BASE_URL
+      options.apiBaseUrl = `${process.env.OPENAI_API_BASE_URL}/v1`
 
     setupProxy(options)
 
