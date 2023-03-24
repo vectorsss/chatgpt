@@ -13,8 +13,10 @@
 ## 截图
 > 声明：此项目只发布于 Github，基于 MIT 协议，免费且作为开源学习使用。并且不会有任何形式的卖号、付费服务、讨论群、讨论组等行为。谨防受骗。
 
+![cover3](./docs/login.jpg)
 ![cover](./docs/c1.png)
 ![cover2](./docs/c2.png)
+![cover3](./docs/basesettings.jpg)
 
 - [ChatGPT Web](#chatgpt-web)
 	- [介绍](#介绍)
@@ -86,6 +88,8 @@
 [✓] 对代码等消息类型的格式化美化处理
 
 [✓] 支持用户登录注册
+
+[✓] 前端页面设置 apikey 等信息
 
 [✓] 数据导入、导出
 
