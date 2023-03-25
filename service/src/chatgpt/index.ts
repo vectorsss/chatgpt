@@ -3,13 +3,18 @@ import 'isomorphic-fetch'
 import type { ChatGPTAPIOptions, ChatMessage, SendMessageOptions } from 'chatgpt'
 import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from 'chatgpt'
 import { SocksProxyAgent } from 'socks-proxy-agent'
-import { HttpsProxyAgent } from 'https-proxy-agent'
+import httpsProxyAgent from 'https-proxy-agent'
 import fetch from 'node-fetch'
 import axios from 'axios'
 import { getCacheConfig, getOriginConfig } from '../storage/config'
 import { sendResponse } from '../utils'
 import { isNotEmptyString } from '../utils/is'
 import type { ApiModel, ChatContext, ChatGPTUnofficialProxyAPIOptions, ModelConfig } from '../types'
+import type { RequestOptions } from './types'
+
+const { HttpsProxyAgent } = httpsProxyAgent
+
+dotenv.config()
 
 const ErrorCodeMessage: Record<string, string> = {
   401: '[OpenAI] 提供错误的API密钥 | Incorrect API key provided',
@@ -20,10 +25,7 @@ const ErrorCodeMessage: Record<string, string> = {
   500: '[OpenAI] 服务器繁忙，请稍后再试 | Internal Server Error',
 }
 
-dotenv.config()
-
 let apiModel: ApiModel
-
 let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
 
 export async function initApi() {
@@ -33,17 +35,30 @@ export async function initApi() {
   if (!config.apiKey && !config.accessToken)
     throw new Error('Missing OPENAI_API_KEY or OPENAI_ACCESS_TOKEN environment variable')
 
-  if (config.apiKey) {
-    const OPENAI_API_MODEL = config.apiModel
+  if (isNotEmptyString(config.apiKey)) {
+    const OPENAI_API_BASE_URL = process.env.OPENAI_API_BASE_URL
+    const OPENAI_API_MODEL = process.env.OPENAI_API_MODEL
     const model = isNotEmptyString(OPENAI_API_MODEL) ? OPENAI_API_MODEL : 'gpt-3.5-turbo'
     const options: ChatGPTAPIOptions = {
       apiKey: config.apiKey,
       completionParams: { model },
       debug: true,
     }
+    // increase max token limit if use gpt-4
+    if (model.toLowerCase().includes('gpt-4')) {
+      // if use 32k model
+      if (model.toLowerCase().includes('32k')) {
+        options.maxModelTokens = 32768
+        options.maxResponseTokens = 8192
+      }
+      else {
+        options.maxModelTokens = 8192
+        options.maxResponseTokens = 2048
+      }
+    }
 
-    if (isNotEmptyString(config.apiBaseUrl))
-      options.apiBaseUrl = config.apiBaseUrl
+    if (isNotEmptyString(OPENAI_API_BASE_URL))
+      options.apiBaseUrl = `${OPENAI_API_BASE_URL}/v1`
 
     await setupProxy(options)
 
@@ -51,10 +66,13 @@ export async function initApi() {
     apiModel = 'ChatGPTAPI'
   }
   else {
+    const OPENAI_API_MODEL = process.env.OPENAI_API_MODEL
     const options: ChatGPTUnofficialProxyAPIOptions = {
       accessToken: config.accessToken,
       debug: true,
     }
+    if (isNotEmptyString(OPENAI_API_MODEL))
+      options.model = OPENAI_API_MODEL
 
     if (isNotEmptyString(config.reverseProxy))
       options.apiReverseProxyUrl = config.reverseProxy
@@ -66,18 +84,20 @@ export async function initApi() {
   }
 }
 
-async function chatReplyProcess(
-  message: string,
-  lastContext?: { conversationId?: string; parentMessageId?: string },
-  process?: (chat: ChatMessage) => void,
-) {
-  const timeoutMs = (await getCacheConfig()).timeoutMs
+async function chatReplyProcess(options: RequestOptions) {
+  const { message, lastContext, process, systemMessage } = options
   try {
+    const timeoutMs = (await getCacheConfig()).timeoutMs
     let options: SendMessageOptions = { timeoutMs }
 
-    if (lastContext) {
+    if (apiModel === 'ChatGPTAPI') {
+      if (isNotEmptyString(systemMessage))
+        options.systemMessage = systemMessage
+    }
+
+    if (lastContext != null) {
       if (apiModel === 'ChatGPTAPI')
-        options = { parentMessageId: lastContext.parentMessageId }
+        options.parentMessageId = lastContext.parentMessageId
       else
         options = { ...lastContext }
     }

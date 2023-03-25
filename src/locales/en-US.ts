@@ -7,7 +7,9 @@ export default {
     delete: 'Delete',
     deleteSuccess: 'Delete Success',
     save: 'Save',
+    test: 'Test',
     saveSuccess: 'Save Success',
+    reset: 'Reset',
     action: 'Action',
     export: 'Export',
     exportSuccess: 'Export Success',
@@ -54,6 +56,7 @@ export default {
   setting: {
     setting: 'Setting',
     general: 'General',
+    advanced: 'Advanced',
     config: 'Base Config',
     siteConfig: 'Site Config',
     mailConfig: 'Mail Config',
@@ -61,6 +64,7 @@ export default {
     name: 'Name',
     description: 'Description',
     saveUserInfo: 'Save User Info',
+    role: 'Role',
     chatHistory: 'ChatHistory',
     theme: 'Theme',
     language: 'Language',
@@ -84,6 +88,7 @@ export default {
     accessToken: 'Access Token',
     loginEnabled: 'Login Enabled',
     loginSalt: 'Login Salt',
+    loginSaltTip: 'Changes will invalidate all logged in',
   },
   store: {
     local: 'Local',

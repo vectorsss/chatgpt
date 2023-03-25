@@ -194,10 +194,10 @@ pnpm dev
 docker build -t chatgpt-web .
 
 # foreground operation
-docker run --name chatgpt-web --rm -it -p 3002:3002 --env OPENAI_API_KEY=your_api_key chatgpt-web
+docker run --name chatgpt-web --rm -it -p 127.0.0.1:3002:3002 --env OPENAI_API_KEY=your_api_key chatgpt-web
 
 # background operation
-docker run --name chatgpt-web -d -p 3002:3002 --env OPENAI_API_KEY=your_api_key chatgpt-web
+docker run --name chatgpt-web -d -p 127.0.0.1:3002:3002 --env OPENAI_API_KEY=your_api_key chatgpt-web
 
 # running address
 http://localhost:3002/
@@ -213,11 +213,14 @@ version: '3'
 services:
   app:
     image: kerwin1202/chatgpt-web # always use latest, pull the tag image again when updating
+    container_name: chatgptweb
+    restart: unless-stopped
     ports:
       - 3002:3002
     depends_on:
       - database
     environment:
+      TZ: Asia/Shanghai
       # one of two
       OPENAI_API_KEY: xxxxxx
       # one of two
@@ -264,6 +267,7 @@ services:
   database:
     image: mongo
     container_name: chatgptweb-database
+    restart: unless-stopped
     ports:
       - '27017:27017'
     expose:

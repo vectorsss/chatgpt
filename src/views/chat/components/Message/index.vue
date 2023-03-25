@@ -7,6 +7,7 @@ import { SvgIcon } from '@/components/common'
 import { copyText } from '@/utils/format'
 import { useIconRender } from '@/hooks/useIconRender'
 import { t } from '@/locales'
+import { useBasicLayout } from '@/hooks/useBasicLayout'
 
 interface Props {
   dateTime?: string
@@ -24,6 +25,8 @@ interface Emit {
 const props = defineProps<Props>()
 
 const emit = defineEmits<Emit>()
+
+const { isMobile } = useBasicLayout()
 
 const { iconRender } = useIconRender()
 
@@ -46,6 +49,7 @@ const options = computed(() => {
       icon: iconRender({ icon: 'ri:delete-bin-line' }),
     },
   ]
+
   if (!props.inversion) {
     common.unshift({
       label: asRawText.value ? t('chat.preview') : t('chat.showRawText'),
@@ -53,8 +57,10 @@ const options = computed(() => {
       icon: iconRender({ icon: asRawText.value ? 'ic:outline-code-off' : 'ic:outline-code' }),
     })
   }
+
   return common
 })
+
 function handleSelect(key: 'copyText' | 'delete' | 'toggleRenderType') {
   switch (key) {
     case 'copyText':
@@ -110,7 +116,12 @@ function handleRegenerate() {
           >
             <SvgIcon icon="ri:restart-line" />
           </button>
-          <NDropdown :placement="!inversion ? 'right' : 'left'" :options="options" @select="handleSelect">
+          <NDropdown
+            :trigger="isMobile ? 'click' : 'hover'"
+            :placement="!inversion ? 'right' : 'left'"
+            :options="options"
+            @select="handleSelect"
+          >
             <button class="transition text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-200">
               <SvgIcon icon="ri:more-2-fill" />
             </button>

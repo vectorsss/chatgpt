@@ -7,7 +7,9 @@ export default {
     delete: '删除',
     deleteSuccess: '删除成功',
     save: '保存',
+    test: '测试',
     saveSuccess: '保存成功',
+    reset: '重置',
     action: '操作',
     export: '导出',
     exportSuccess: '导出成功',
@@ -54,6 +56,7 @@ export default {
   setting: {
     setting: '设置',
     general: '总览',
+    advanced: '高级',
     config: '基本配置',
     siteConfig: '网站配置',
     mailConfig: '邮箱配置',
@@ -61,6 +64,7 @@ export default {
     name: '名称',
     description: '描述',
     saveUserInfo: '保存用户信息',
+    role: '角色设定',
     chatHistory: '聊天记录',
     theme: '主题',
     language: '语言',
@@ -84,6 +88,7 @@ export default {
     accessToken: 'Access Token',
     loginEnabled: '注册登录',
     loginSalt: '登录混淆盐',
+    loginSaltTip: '变更会导致所有已登录失效',
   },
   store: {
     local: '本地',
